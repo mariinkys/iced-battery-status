@@ -128,12 +128,12 @@ struct BatteryInfo {
     battery_present: bool,
     rechargeable: bool,
     warning_level: String,
-    energy_now: String,         //energy f32
-    energy_empty: String,       //f32
-    energy_full: String,        //f32
-    energy_full_design: String, //f32
-    percentage: String,         //f32
-    capacity: String,           //f32
+    energy_now: f32,         //energy f32
+    energy_empty: f32,       //f32
+    energy_full: f32,        //f32
+    energy_full_design: f32, //f32
+    percentage: f32,         //f32
+    capacity: f32,           //f32
 }
 
 fn parse_upower_ouput(input: &str) -> Vec<DataHelper> {
@@ -167,14 +167,61 @@ fn parse_datahelper(data: Vec<DataHelper>) -> BatteryInfo {
             "present" => battery_info.battery_present = d.value == "yes",
             "rechargeable" => battery_info.rechargeable = d.value == "yes",
             "warning-level" => battery_info.warning_level = d.value,
-            "energy-now" => battery_info.energy_now = d.value,
-            "energy-empty" => battery_info.energy_empty = d.value,
-            "energy-full" => battery_info.energy_full = d.value,
-            "energy-full-design" => battery_info.energy_full_design = d.value,
-            "percentage" => battery_info.percentage = d.value,
-            "capacity" => battery_info.capacity = d.value,
+            "energy-now" => {
+                if let Some(value) = extract_numeric(&d.value) {
+                    battery_info.energy_now = value;
+                } else {
+                    battery_info.energy_now = 0.0;
+                }
+            }
+            "energy-empty" => {
+                if let Some(value) = extract_numeric(&d.value) {
+                    battery_info.energy_empty = value;
+                } else {
+                    battery_info.energy_empty = 0.0;
+                }
+            }
+            "energy-full" => {
+                if let Some(value) = extract_numeric(&d.value) {
+                    battery_info.energy_full = value;
+                } else {
+                    battery_info.energy_full = 0.0;
+                }
+            }
+            "energy-full-design" => {
+                if let Some(value) = extract_numeric(&d.value) {
+                    battery_info.energy_full_design = value;
+                } else {
+                    battery_info.energy_full_design = 0.0;
+                }
+            }
+            "percentage" => {
+                if let Some(value) = extract_numeric(&d.value) {
+                    battery_info.percentage = value;
+                } else {
+                    battery_info.percentage = 0.0;
+                }
+            }
+            "capacity" => {
+                if let Some(value) = extract_numeric(&d.value) {
+                    battery_info.capacity = value;
+                } else {
+                    battery_info.capacity = 0.0;
+                }
+            }
             _ => (),
         }
     }
     battery_info
+}
+
+fn extract_numeric(value: &str) -> Option<f32> {
+    // Remove percentage sign and then filter out non-digit characters
+    let numeric_part: String = value
+        .replace(',', ".")
+        .replace('%', "")
+        .chars()
+        .filter(|&c| c.is_ascii_digit() || c == '.')
+        .collect();
+    numeric_part.parse::<f32>().ok()
 }
