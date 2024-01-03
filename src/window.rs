@@ -63,7 +63,6 @@ impl Application for State {
     }
 
     fn view(&self) -> iced::Element<'_, Self::Message, iced::Renderer<Self::Theme>> {
-        let title_text = text("Battery Status").size(50);
         let errors_output = text(self.errors.to_string());
         let project_root = env!("CARGO_MANIFEST_DIR");
 
@@ -75,6 +74,8 @@ impl Application for State {
                 image::viewer(image)
                     .width(Length::Fixed(200.0))
                     .height(Length::Fixed(200.0))
+                    .max_scale(10.0)
+                    .min_scale(10.0)
             }
             value if value < 75.0 && value > 50.0 => {
                 let image_path = std::path::PathBuf::from(project_root)
@@ -83,6 +84,8 @@ impl Application for State {
                 image::viewer(image)
                     .width(Length::Fixed(200.0))
                     .height(Length::Fixed(200.0))
+                    .max_scale(10.0)
+                    .min_scale(10.0)
             }
             value if value < 50.0 && value > 25.0 => {
                 let image_path = std::path::PathBuf::from(project_root)
@@ -91,6 +94,8 @@ impl Application for State {
                 image::viewer(image)
                     .width(Length::Fixed(200.0))
                     .height(Length::Fixed(200.0))
+                    .max_scale(10.0)
+                    .min_scale(10.0)
             }
             _ => {
                 let image_path = std::path::PathBuf::from(project_root)
@@ -99,6 +104,8 @@ impl Application for State {
                 image::viewer(image)
                     .width(Length::Fixed(200.0))
                     .height(Length::Fixed(200.0))
+                    .max_scale(10.0)
+                    .min_scale(10.0)
             }
         };
 
@@ -144,7 +151,7 @@ impl Application for State {
             .spacing(50.0);
 
         container(
-            column!(title_text, errors_output, overall_battery_row)
+            column!(errors_output, overall_battery_row)
                 .align_items(iced::Alignment::Center)
                 .padding(10),
         )
@@ -198,12 +205,12 @@ struct BatteryInfo {
     battery_present: bool,
     rechargeable: bool,
     warning_level: String,
-    energy_now: f32,         //energy f32
-    energy_empty: f32,       //f32
-    energy_full: f32,        //f32
-    energy_full_design: f32, //f32
-    percentage: f32,         //f32
-    capacity: f32,           //f32
+    energy_now: f32,
+    energy_empty: f32,
+    energy_full: f32,
+    energy_full_design: f32,
+    percentage: f32,
+    capacity: f32,
 }
 
 fn parse_upower_ouput(input: &str) -> Vec<DataHelper> {
