@@ -1,7 +1,7 @@
 use iced::{
     executor,
-    widget::{column, container, text, Button},
-    Application, Command, Length, Theme,
+    widget::{column, container, image, row, text, Button, Image},
+    Application, Color, Command, Length, Theme,
 };
 
 pub struct State {
@@ -27,8 +27,15 @@ impl Application for State {
         (
             State {
                 theme: system_theme_mode(),
-                battery_location: String::from("/org/freedesktop/UPower/devices/battery_BAT0"),
-                battery_status: BatteryInfo::default(),
+                battery_location: String::from("/org/freedesktop/UPower/devices/battery_BAT0"), //TODO: Load config battery_location
+                battery_status: {
+                    match get_battery_stats(String::from(
+                        "/org/freedesktop/UPower/devices/battery_BAT0", //TODO: Load config battery_location
+                    )) {
+                        Ok(data) => parse_datahelper(parse_upower_ouput(&data)),
+                        Err(_err) => BatteryInfo::default(),
+                    }
+                },
                 errors: String::from(""),
             },
             Command::none(),
@@ -58,23 +65,86 @@ impl Application for State {
     fn view(&self) -> iced::Element<'_, Self::Message, iced::Renderer<Self::Theme>> {
         let title_text = text("Battery Status").size(50);
         let errors_output = text(self.errors.to_string());
+        let project_root = env!("CARGO_MANIFEST_DIR");
 
-        let check_button = Button::new("Check")
-            .on_press(Messages::GetBatteryStatus)
-            .padding(10);
+        let battery_image = match self.battery_status.capacity {
+            value if value > 75.0 => {
+                let image_path = std::path::PathBuf::from(project_root)
+                    .join("resources/batteryicons/battery_100.png");
+                let image = image::Handle::from_path(image_path);
+                image::viewer(image)
+                    .width(Length::Fixed(200.0))
+                    .height(Length::Fixed(200.0))
+            }
+            value if value < 75.0 && value > 50.0 => {
+                let image_path = std::path::PathBuf::from(project_root)
+                    .join("resources/batteryicons/battery_75.png");
+                let image = image::Handle::from_path(image_path);
+                image::viewer(image)
+                    .width(Length::Fixed(200.0))
+                    .height(Length::Fixed(200.0))
+            }
+            value if value < 50.0 && value > 25.0 => {
+                let image_path = std::path::PathBuf::from(project_root)
+                    .join("resources/batteryicons/battery_50.png");
+                let image = image::Handle::from_path(image_path);
+                image::viewer(image)
+                    .width(Length::Fixed(200.0))
+                    .height(Length::Fixed(200.0))
+            }
+            _ => {
+                let image_path = std::path::PathBuf::from(project_root)
+                    .join("resources/batteryicons/battery_25.png");
+                let image = image::Handle::from_path(image_path);
+                image::viewer(image)
+                    .width(Length::Fixed(200.0))
+                    .height(Length::Fixed(200.0))
+            }
+        };
 
         let battery_info_column =
             if self.errors.to_string().is_empty() && self.battery_status.battery_present {
-                let energy_full = text(self.battery_status.energy_full.to_string());
-                let energy_full_design = text(self.battery_status.energy_full_design.to_string());
+                let battery_model_text =
+                    text(format!("Battery Model: {}", self.battery_status.model)).size(20);
+                let battery_state_text = text(format!(
+                    "Current Battery: {}%",
+                    self.battery_status.percentage
+                ))
+                .size(20);
+                let battery_energy_full_design = text(format!(
+                    "Designed Max Capacity: {}Wh",
+                    self.battery_status.energy_full_design
+                ))
+                .size(20);
+                let battery_energy_full = text(format!(
+                    "Current Max Capacity: {}Wh",
+                    self.battery_status.energy_full
+                ))
+                .size(20);
+                let battery_health =
+                    text(format!("Battery Health: {}%", self.battery_status.capacity)).size(20);
 
-                column!(energy_full, energy_full_design)
+                column!(
+                    battery_model_text,
+                    battery_state_text,
+                    battery_energy_full_design,
+                    battery_energy_full,
+                    battery_health
+                )
             } else {
-                column!(text(String::from("")))
+                column!(text(String::from(
+                    "Error, please check your battery location and check again"
+                ))
+                .style(Color::from_rgb(1.0, 0.0, 0.0))
+                .size(20))
             };
 
+        let overall_battery_row = row!(battery_image, battery_info_column)
+            .align_items(iced::Alignment::Center)
+            .spacing(50.0);
+
         container(
-            column!(title_text, check_button, errors_output, battery_info_column)
+            column!(title_text, errors_output, overall_battery_row)
                 .align_items(iced::Alignment::Center)
                 .padding(10),
         )
