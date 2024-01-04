@@ -122,29 +122,36 @@ impl Application for BatteryStatus {
 
     fn view(&self) -> iced::Element<'_, Self::Message, iced::Renderer<Self::Theme>> {
         let content = match self {
-            BatteryStatus::Main { battery_info } => row![battery_info.view()].width(Length::Fill),
+            BatteryStatus::Main { battery_info } => row!(battery_info.view()),
             BatteryStatus::Settings {
                 application_settings,
-            } => row![
-                TextInput::new("Battery Location", &application_settings.battery_location)
-                    .on_input(Messages::InputNewBatteryLocation),
-                button("Update").on_press(Messages::UpdateBatteryConfig)
-            ]
-            .width(Length::Fill),
+            } => {
+                let battery_location_text = text("Battery Location").size(15);
+                let battery_location_input =
+                    TextInput::new("Battery Location", &application_settings.battery_location)
+                        .on_input(Messages::InputNewBatteryLocation);
+
+                let battery_location_column =
+                    column!(battery_location_text, battery_location_input);
+
+                row!(battery_location_column)
+            }
         };
 
         let controls = match self {
             BatteryStatus::Main { battery_info: _ } => row![button("Settings")
-                .padding(12)
+                .padding(5)
                 .on_press(Messages::OpenSettings)],
             BatteryStatus::Settings {
                 application_settings: _,
-            } => row![button("Back").padding(12).on_press(Messages::OpenMain)],
+            } => row![
+                button("Back").padding(5).on_press(Messages::OpenMain),
+                button("Save").on_press(Messages::UpdateBatteryConfig)
+            ]
+            .spacing(10),
         };
 
-        container(column!(controls, content).spacing(30).padding(10))
-            .width(Length::Fill)
-            .into()
+        container(column!(controls, content).spacing(30).padding(10)).into()
     }
 }
 
