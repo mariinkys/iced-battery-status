@@ -1,10 +1,10 @@
 use iced::{
     executor,
-    widget::{button, column, container, image, row, text},
+    widget::{button, column, container, image, row, text, TextInput},
     Application, Color, Command, Element, Length, Theme,
 };
 
-use crate::config::{load_create_config, BatteryStatusConfiguration};
+use crate::config::{load_create_config, update_battery_config, BatteryStatusConfiguration};
 
 const FALLBACK_BATTERY_LOCATION: &str = "/org/freedesktop/UPower/devices/battery_BAT0";
 
@@ -19,7 +19,7 @@ pub enum BatteryStatus {
 }
 
 impl BatteryStatus {
-    pub fn get_application_settings(&self) -> Option<&BatteryStatusConfiguration> {
+    pub fn get_application_settings(&mut self) -> Option<&mut BatteryStatusConfiguration> {
         match self {
             BatteryStatus::Settings {
                 application_settings,
@@ -33,6 +33,8 @@ impl BatteryStatus {
 pub enum Messages {
     OpenSettings,
     OpenMain,
+    InputNewBatteryLocation(String),
+    UpdateBatteryConfig,
 }
 
 impl Application for BatteryStatus {
@@ -95,16 +97,40 @@ impl Application for BatteryStatus {
                     }
                 }
             }
+            Messages::InputNewBatteryLocation(data) => {
+                if let Some(application_settings) = self.get_application_settings() {
+                    application_settings.battery_location = data;
+                }
+            }
+            Messages::UpdateBatteryConfig => {
+                if let Some(application_settings) = self.get_application_settings() {
+                    let new_json_content = format!(
+                        "{{\"battery_location\": \"{}\"}}",
+                        application_settings.battery_location
+                    );
+
+                    update_battery_config(new_json_content);
+                    let reloaded_config = load_create_config();
+                    *self = BatteryStatus::Settings {
+                        application_settings: reloaded_config,
+                    };
+                }
+            }
         }
         Command::none()
     }
 
     fn view(&self) -> iced::Element<'_, Self::Message, iced::Renderer<Self::Theme>> {
         let content = match self {
-            BatteryStatus::Main { battery_info } => row![battery_info.view()],
+            BatteryStatus::Main { battery_info } => row![battery_info.view()].width(Length::Fill),
             BatteryStatus::Settings {
-                application_settings: _,
-            } => row![text("Settings").size(40),].width(Length::Shrink),
+                application_settings,
+            } => row![
+                TextInput::new("Battery Location", &application_settings.battery_location)
+                    .on_input(Messages::InputNewBatteryLocation),
+                button("Update").on_press(Messages::UpdateBatteryConfig)
+            ]
+            .width(Length::Fill),
         };
 
         let controls = match self {

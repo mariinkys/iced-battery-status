@@ -1,5 +1,5 @@
 use std::{
-    fs::{self, File},
+    fs::{self, File, OpenOptions},
     io::Write,
     path::Path,
 };
@@ -13,8 +13,8 @@ pub struct BatteryStatusConfiguration {
 
 pub fn load_create_config() -> BatteryStatusConfiguration {
     let project_root = env!("CARGO_MANIFEST_DIR");
-    let relative_path = "config.json";
-    let file_path = Path::new(project_root).join(relative_path);
+    let file_name = "config.json";
+    let file_path = Path::new(project_root).join(file_name);
 
     // Check if the file exists
     if fs::metadata(&file_path).is_ok() {
@@ -43,4 +43,20 @@ fn parse_json_config(json_content: String) -> BatteryStatusConfiguration {
     let p: BatteryStatusConfiguration =
         serde_json::from_str(&json_content).expect("Could not parse config");
     p
+}
+
+pub fn update_battery_config(json_content: String) {
+    let project_root = env!("CARGO_MANIFEST_DIR");
+    let file_name = "config.json";
+    let file_path = Path::new(project_root).join(file_name);
+
+    if let Ok(mut file) = OpenOptions::new()
+        .write(true)
+        .truncate(true)
+        .create(true)
+        .open(file_path)
+    {
+        // Write data to the file
+        writeln!(file, "{}", json_content).expect("Failed to write to file");
+    }
 }
