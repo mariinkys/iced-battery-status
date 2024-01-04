@@ -1,3 +1,4 @@
+mod config;
 mod window;
 use iced::{Application, Settings};
 use window::BatteryStatus;

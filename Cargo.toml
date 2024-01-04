@@ -8,3 +8,5 @@ edition = "2021"
 [dependencies]
 iced = { version = "0.10.0", features = ["image"] }
 dark-light = "1.0.0"
+serde = { version = "1.0.194", features = ["derive"] }
+serde_json = "1.0.111"

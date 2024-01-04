@@ -4,18 +4,26 @@ use iced::{
     Application, Color, Command, Element, Length, Theme,
 };
 
+use crate::config::{load_create_config, BatteryStatusConfiguration};
+
 const FALLBACK_BATTERY_LOCATION: &str = "/org/freedesktop/UPower/devices/battery_BAT0";
 
 #[derive(Debug)]
 pub enum BatteryStatus {
-    Settings { battery_location: String },
-    Main { battery_info: BatteryInfo },
+    Settings {
+        application_settings: BatteryStatusConfiguration,
+    },
+    Main {
+        battery_info: BatteryInfo,
+    },
 }
 
 impl BatteryStatus {
-    pub fn battery_location(&self) -> Option<&String> {
+    pub fn get_application_settings(&self) -> Option<&BatteryStatusConfiguration> {
         match self {
-            BatteryStatus::Settings { battery_location } => Some(battery_location),
+            BatteryStatus::Settings {
+                application_settings,
+            } => Some(application_settings),
             _ => None,
         }
     }
@@ -30,15 +38,16 @@ pub enum Messages {
 impl Application for BatteryStatus {
     type Message = Messages;
     type Executor = executor::Default;
-    type Flags = ();
+    type Flags = BatteryStatusConfiguration;
     type Theme = Theme;
 
     fn new(_flags: Self::Flags) -> (Self, iced::Command<Self::Message>) {
+        let application_settings = load_create_config();
         (
             BatteryStatus::Main {
-                battery_info: BatteryInfo::update_battery_info(String::from(
-                    FALLBACK_BATTERY_LOCATION,
-                )),
+                battery_info: {
+                    BatteryInfo::update_battery_info(application_settings.battery_location)
+                },
             },
             Command::none(),
         )
@@ -56,26 +65,17 @@ impl Application for BatteryStatus {
     fn update(&mut self, message: Self::Message) -> Command<Self::Message> {
         match message {
             Messages::OpenSettings => {
+                let loaded_application_settings = load_create_config();
                 *self = BatteryStatus::Settings {
-                    battery_location: {
-                        if let Some(battery_location) = self.battery_location() {
-                            if !battery_location.is_empty() {
-                                battery_location.to_owned()
-                            } else {
-                                String::from(FALLBACK_BATTERY_LOCATION)
-                            }
-                        } else {
-                            String::from(FALLBACK_BATTERY_LOCATION)
-                        }
-                    },
+                    application_settings: loaded_application_settings,
                 };
             }
             Messages::OpenMain => {
-                if let Some(battery_location) = self.battery_location() {
-                    if !battery_location.is_empty() {
+                if let Some(application_settings) = self.get_application_settings() {
+                    if !application_settings.battery_location.is_empty() {
                         *self = BatteryStatus::Main {
                             battery_info: BatteryInfo::update_battery_info(
-                                battery_location.to_string(),
+                                application_settings.battery_location.to_string(),
                             ),
                         }
                     } else {
@@ -103,7 +103,7 @@ impl Application for BatteryStatus {
         let content = match self {
             BatteryStatus::Main { battery_info } => row![battery_info.view()],
             BatteryStatus::Settings {
-                battery_location: _,
+                application_settings: _,
             } => row![text("Settings").size(40),].width(Length::Shrink),
         };
 
@@ -112,7 +112,7 @@ impl Application for BatteryStatus {
                 .padding(12)
                 .on_press(Messages::OpenSettings)],
             BatteryStatus::Settings {
-                battery_location: _,
+                application_settings: _,
             } => row![button("Back").padding(12).on_press(Messages::OpenMain)],
         };
 
