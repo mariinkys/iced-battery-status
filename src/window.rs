@@ -275,8 +275,7 @@ impl BatteryInfo {
     }
 
     fn get_battery_stats(battery_location: String) -> Result<String, String> {
-        let output = std::process::Command::new("/bin/distrobox-host-exec")
-            .arg("upower")
+        let output = std::process::Command::new("upower")
             .arg("-i")
             .arg(battery_location)
             .output()
