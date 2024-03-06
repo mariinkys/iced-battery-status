@@ -120,7 +120,7 @@ impl Application for BatteryStatus {
         Command::none()
     }
 
-    fn view(&self) -> iced::Element<'_, Self::Message, iced::Renderer<Self::Theme>> {
+    fn view(&self) -> iced::Element<'_, Self::Message> {
         let content = match self {
             BatteryStatus::Main { battery_info } => row!(battery_info.view()),
             BatteryStatus::Settings {
@@ -275,6 +275,13 @@ impl BatteryInfo {
     }
 
     fn get_battery_stats(battery_location: String) -> Result<String, String> {
+        // let output = std::process::Command::new("/bin/distrobox-host-exec")
+        //     .arg("upower")
+        //     .arg("-i")
+        //     .arg(battery_location)
+        //     .output()
+        //     .map_err(|e| format!("Failed to execute command: {}", e))?;
+
         let output = std::process::Command::new("upower")
             .arg("-i")
             .arg(battery_location)
