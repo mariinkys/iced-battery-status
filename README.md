@@ -1,14 +1,6 @@
 # Battery Status
 
-Battery Status is a GUI for the [upower cli tool](https://upower.freedesktop.org/) that shows your battery status in a Linux desktop.
-
-<p align="center">
-  <img src="https://github.com/mariinkys/iced-battery-status/blob/main/examples/demo.gif" alt="App Demo Gif">
-</p>
-
-## Important
-
-The application needs upower to be installed in order to work.
+Battery Status is a GUI made in Rust that shows your battery status in a Linux desktop.
 
 ## Resources
 
@@ -23,8 +15,7 @@ The application needs upower to be installed in order to work.
 ## TODO
 
 - [ ] Application change light/dark theme depending on system theme
-- [ ] Improve the application design
-- [ ] Let the user configure upower location
+- [X] Improve the application design
 - [ ] Publish the application as a Flatpak
 
 ## About me
