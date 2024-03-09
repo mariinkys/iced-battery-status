@@ -128,6 +128,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa"
 
 [[package]]
+name = "battery-status"
+version = "1.0.0"
+dependencies = [
+ "iced",
+ "starship-battery",
+]
+
+[[package]]
 name = "bit-set"
 version = "0.5.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -979,14 +987,6 @@ dependencies = [
  "iced_widget",
  "iced_winit",
  "thiserror",
-]
-
-[[package]]
-name = "iced-battery"
-version = "1.0.0"
-dependencies = [
- "iced",
- "starship-battery",
 ]
 
 [[package]]
