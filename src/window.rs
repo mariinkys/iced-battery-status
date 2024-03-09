@@ -67,7 +67,7 @@ impl Application for BatteryStatus {
 
 // Page Header
 fn page_header() -> Container<'static, Messages> {
-    let toggle_button = toggle_theme_button("T", Messages::ToggleTheme);
+    let toggle_button = toggle_theme_button("◐", Messages::ToggleTheme);
 
     let header = Row::new()
         .push(Space::new(Length::Fill, 0))
@@ -94,6 +94,7 @@ fn content_page() -> Container<'static, Messages> {
 fn toggle_theme_button(name: &str, event: Messages) -> Button<Messages> {
     Button::new(
         text(name)
+            .shaping(text::Shaping::Advanced)
             .horizontal_alignment(Horizontal::Center)
             .vertical_alignment(Vertical::Center)
             .size(15),
