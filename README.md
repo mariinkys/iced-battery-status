@@ -2,6 +2,11 @@
 
 Battery Status is a GUI made in Rust that shows your battery status in a Linux desktop.
 
+<p align="center">
+  <img src="https://github.com/mariinkys/iced-battery-status/blob/main/screenshots/dark-theme-screenshot.png?raw=true"/> 
+  <img src="https://github.com/mariinkys/iced-battery-status/blob/main/screenshots/light-theme-screenshot.png?raw=true"/> 
+</p>
+
 ## Resources
 
 - [The Rust Programming Language - Book](https://doc.rust-lang.org/book/)
@@ -16,7 +21,7 @@ Battery Status is a GUI made in Rust that shows your battery status in a Linux d
 
 - [ ] Application change light/dark theme depending on system theme
 - [X] Improve the application design
-- [ ] Theme Toggler Icon
+- [X] Theme Toggler Icon
 - [ ] Publish the application as a Flatpak
 
 ## About me
