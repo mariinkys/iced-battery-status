@@ -103,6 +103,8 @@ impl BatteryStatus {
                     .push(max_capacity_row)
                     .push(battery_health_row)
                     .align_x(Alignment::Center)
+                    .width(Length::Fill)
+                    .height(Length::Fill)
             }
             None => Column::new().push(
                 text("Error Getting Battery")

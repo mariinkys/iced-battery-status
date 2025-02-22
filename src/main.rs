@@ -11,7 +11,7 @@ fn main() -> Result<(), iced::Error> {
         .window(Settings {
             size: Size {
                 width: 300.,
-                height: 200.,
+                height: 130.,
             },
             position: Position::Centered,
             resizable: true,
