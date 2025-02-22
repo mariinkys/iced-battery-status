@@ -1,10 +1,10 @@
 [package]
 name = "battery-status"
-version = "1.0.0"
-edition = "2021"
+version = "2.0.0"
+edition = "2024"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-iced = { version = "0.12.1" }
-starship-battery = "0.8.2"
+iced = { version = "0.13.1", features = ["tokio"] }
+starship-battery = "0.10.0"

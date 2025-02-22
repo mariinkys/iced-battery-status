@@ -1,19 +1,22 @@
-mod theme;
 mod window;
-use iced::{Application, Settings, Size};
+
+use iced::{
+    Size, Task,
+    window::{Position, Settings},
+};
 use window::BatteryStatus;
 
-fn main() {
-    BatteryStatus::run(Settings {
-        window: iced::window::Settings {
-            size: (Size {
-                width: 300.0,
-                height: 200.0,
-            }),
+fn main() -> Result<(), iced::Error> {
+    iced::application("Battery Status", BatteryStatus::update, BatteryStatus::view)
+        .window(Settings {
+            size: Size {
+                width: 300.,
+                height: 200.,
+            },
+            position: Position::Centered,
             resizable: true,
             ..Default::default()
-        },
-        ..Default::default()
-    })
-    .expect("Battery Status");
+        })
+        .subscription(BatteryStatus::subscription)
+        .run_with(|| (BatteryStatus::new(), Task::none()))
 }
