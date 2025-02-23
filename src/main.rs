@@ -18,5 +18,6 @@ fn main() -> Result<(), iced::Error> {
             ..Default::default()
         })
         .subscription(BatteryStatus::subscription)
+        .theme(BatteryStatus::theme)
         .run_with(|| (BatteryStatus::new(), Task::none()))
 }

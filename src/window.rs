@@ -1,23 +1,26 @@
 use std::time::Duration;
 
 use iced::{
-    Alignment, Length, Padding, Subscription, time,
+    Alignment, Length, Padding, Subscription, Theme, time,
     widget::{Column, Row, container, text},
 };
 use starship_battery::{Battery, Manager};
 
 pub struct BatteryStatus {
+    theme: Theme,
     manager: Manager,
     battery: Option<Battery>,
 }
 
 #[derive(Debug, Clone)]
 pub enum Message {
+    SystemThemeMode(Theme),
     GetBattery,
 }
 
 impl BatteryStatus {
     pub fn new() -> Self {
+        let theme = system_theme_mode();
         let manager = starship_battery::Manager::new().unwrap();
         let battery: Option<Battery> = manager
             .batteries()
@@ -25,7 +28,11 @@ impl BatteryStatus {
             .filter_map(|maybe_battery| maybe_battery.ok())
             .next();
 
-        Self { manager, battery }
+        Self {
+            theme,
+            manager,
+            battery,
+        }
     }
 
     pub fn view(&self) -> iced::Element<'_, Message> {
@@ -133,12 +140,35 @@ impl BatteryStatus {
                     .filter_map(|maybe_battery| maybe_battery.ok())
                     .next();
             }
+
+            Message::SystemThemeMode(theme) => {
+                self.theme = theme;
+            }
         }
         iced::Task::none()
     }
 
     pub fn subscription(&self) -> Subscription<Message> {
         // Update the battery info every 30 seconds
-        time::every(Duration::from_secs(30)).map(|_| Message::GetBattery)
+        Subscription::batch([
+            time::every(Duration::from_secs(30)).map(|_| Message::GetBattery),
+            time::every(Duration::from_secs(30))
+                .map(|_| Message::SystemThemeMode(system_theme_mode())),
+        ])
+    }
+
+    pub fn theme(&self) -> Theme {
+        self.theme.clone()
+    }
+}
+
+fn system_theme_mode() -> Theme {
+    match dark_light::detect() {
+        Ok(dark_light::Mode::Light) | Ok(dark_light::Mode::Unspecified) => Theme::Light,
+        Ok(dark_light::Mode::Dark) => Theme::Dark,
+        Err(err) => {
+            eprintln!("{err}");
+            Theme::Dark
+        }
     }
 }
