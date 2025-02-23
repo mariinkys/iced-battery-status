@@ -138,6 +138,7 @@ impl BatteryStatus {
     }
 
     pub fn subscription(&self) -> Subscription<Message> {
+        // Update the battery info every 30 seconds
         time::every(Duration::from_secs(30)).map(|_| Message::GetBattery)
     }
 }
