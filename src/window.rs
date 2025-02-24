@@ -1,10 +1,11 @@
-use std::time::Duration;
+// SPDX-License-Identifier: GPL-3.0-only
 
 use iced::{
     Alignment, Length, Padding, Subscription, Theme, time,
     widget::{Column, Row, container, text},
 };
 use starship_battery::{Battery, Manager};
+use std::time::Duration;
 
 use crate::fl;
 
