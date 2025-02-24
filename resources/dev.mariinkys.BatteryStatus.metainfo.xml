@@ -27,7 +27,7 @@
       </p>
     </description>
 
-    <icon type="remote" height="256" width="256">https://raw.githubusercontent.com/mariinkys/iced-battery-status/main/resources/icons/hicolor/scalable/apps/icon.svg</icon>
+    <icon type="remote" height="256" width="256">https://raw.githubusercontent.com/mariinkys/iced-battery-status/main/resources/icons/hicolor/scalable/apps/dev.mariinkys.BatteryStatus.svg</icon>
     <launchable type="desktop-id">dev.mariinkys.BatteryStatus.desktop</launchable>
     <content_rating type="oars-1.1"/>
 

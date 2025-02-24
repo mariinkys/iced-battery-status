@@ -31,8 +31,8 @@
                 "install -Dm0755 ./target/release/battery-status /app/bin/battery-status",
                 "install -Dm0644 ./resources/dev.mariinkys.BatteryStatus.desktop /app/share/applications/dev.mariinkys.BatteryStatus.desktop",
                 "install -Dm0644 ./resources/dev.mariinkys.BatteryStatus.metainfo.xml /app/share/metainfo/dev.mariinkys.BatteryStatus.metainfo.xml",
-                "install -Dm0644 ./resources/icons/hicolor/256x256/apps/icon.png /app/share/icons/hicolor/256x256/apps/dev.mariinkys.BatteryStatus.png",
-                "install -Dm0644 ./resources/icons/hicolor/scalable/apps/icon.svg /app/share/icons/hicolor/scalable/apps/dev.mariinkys.BatteryStatus.svg"
+                "install -Dm0644 ./resources/icons/hicolor/256x256/apps/dev.mariinkys.BatteryStatus.png /app/share/icons/hicolor/256x256/apps/dev.mariinkys.BatteryStatus.png",
+                "install -Dm0644 ./resources/icons/hicolor/scalable/apps/dev.mariinkys.BatteryStatus.svg /app/share/icons/hicolor/scalable/apps/dev.mariinkys.BatteryStatus.svg"
             ],
             "sources": [
                 {
