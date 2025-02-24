@@ -1,3 +1,4 @@
+mod i18n;
 mod window;
 
 use iced::{
@@ -7,6 +8,12 @@ use iced::{
 use window::BatteryStatus;
 
 fn main() -> Result<(), iced::Error> {
+    // Get the system's preferred languages.
+    let requested_languages = i18n_embed::DesktopLanguageRequester::requested_languages();
+
+    // Enable localizations to be applied.
+    i18n::init(&requested_languages);
+
     iced::application("Battery Status", BatteryStatus::update, BatteryStatus::view)
         .window(Settings {
             size: Size {

@@ -6,6 +6,8 @@ use iced::{
 };
 use starship_battery::{Battery, Manager};
 
+use crate::fl;
+
 pub struct BatteryStatus {
     theme: Theme,
     manager: Manager,
@@ -114,7 +116,7 @@ impl BatteryStatus {
                     .height(Length::Fill)
             }
             None => Column::new().push(
-                text("Error Getting Battery")
+                text(fl!("battery-error"))
                     .size(24)
                     .align_x(Alignment::Center)
                     .align_y(Alignment::Center)

@@ -1,0 +1,1 @@
+battery-error = Error Getting Battery
