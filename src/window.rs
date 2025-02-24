@@ -41,7 +41,9 @@ impl BatteryStatus {
         let content = match &self.battery {
             Some(battery) => {
                 //Format the battery data
-                let battery_name: &str = battery.model().unwrap_or("Battery name not available");
+                let battery_name =
+                    String::from(battery.model().unwrap_or(&fl!("battery-name-error")));
+
                 let current_battery: f32 = battery
                     .state_of_charge()
                     .get::<starship_battery::units::ratio::percent>();
@@ -59,7 +61,11 @@ impl BatteryStatus {
                 //Format Each Row
                 let current_battery_row = Row::new()
                     .spacing(3.0)
-                    .push(text("Current Battery:").size(15).align_y(Alignment::Center))
+                    .push(
+                        text(fl!("current-battery"))
+                            .size(15)
+                            .align_y(Alignment::Center),
+                    )
                     .push(
                         text(format!("{:.2}%", current_battery))
                             .size(15)
@@ -70,7 +76,7 @@ impl BatteryStatus {
                 let max_capacity_designed_row = Row::new()
                     .spacing(3.0)
                     .push(
-                        text("Designed Max Capacity")
+                        text(fl!("designed-max-capacity"))
                             .size(15)
                             .align_y(Alignment::Center),
                     )
@@ -84,7 +90,7 @@ impl BatteryStatus {
                 let max_capacity_row = Row::new()
                     .spacing(3.0)
                     .push(
-                        text("Actual Max Capacity:")
+                        text(fl!("actual-max-capacity"))
                             .size(15)
                             .align_y(Alignment::Center),
                     )
@@ -97,7 +103,11 @@ impl BatteryStatus {
 
                 let battery_health_row = Row::new()
                     .spacing(3.0)
-                    .push(text("Battery Health:").size(15).align_y(Alignment::Center))
+                    .push(
+                        text(fl!("battery-health"))
+                            .size(15)
+                            .align_y(Alignment::Center),
+                    )
                     .push(
                         text(format!("{:.2}%", battery_health))
                             .size(15)
@@ -124,6 +134,7 @@ impl BatteryStatus {
                     .height(Length::Fill),
             ),
         };
+
         container(content)
             .width(Length::Fill)
             .height(Length::Fill)
