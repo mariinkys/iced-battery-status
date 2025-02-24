@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Battery Status
+Comment=Easily see and monitor your battery health and status
+Exec=battery-status %F
+Terminal=false
+Type=Application
+StartupNotify=true
+Icon=dev.mariinkys.BatteryStatus
+Categories=Utility;System;
+Keywords=Battery;Status;Health;Monitor;Tool;
