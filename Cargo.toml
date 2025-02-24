@@ -6,10 +6,13 @@ edition = "2024"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-dark-light = "2.0.0"                                #needed for theme detection
-i18n-embed-fl = "0.9.3"                             #needed for localization
-rust-embed = "8.5.0"                                #needed for localization
-iced = { version = "0.13.1", features = ["tokio"] }
+dark-light = "2.0.0" #needed for theme detection
+i18n-embed-fl = "0.9.3" #needed for localization
+rust-embed = "8.5.0" #needed for localization
+iced = { version = "0.13.1", default-features = false, features = [
+    "tokio",
+    "tiny-skia",
+] }
 starship-battery = "0.10.0"
 
 [dependencies.i18n-embed]
