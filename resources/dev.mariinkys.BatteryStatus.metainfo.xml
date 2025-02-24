@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+    <id>dev.mariinkys.BatteryStatus</id>
+    <developer id="dev.mariinkys">
+        <name>mariinkys</name>
+    </developer>
+    <url type="homepage">https://github.com/mariinkys/iced-battery-status</url>
+    <url type="bugtracker">https://github.com/mariinkys/iced-battery-status/issues</url>
+    <url type="donation">https://buymeacoffee.com/mariinkys</url>
+
+    <name>Battery Status</name>
+    <summary>Barebones battery status and health viewer</summary>
+
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>GPL-3.0-only</project_license>
+
+    <provides>
+        <id>dev.mariinkys.BatteryStatus</id>
+        <binaries>
+            <binary>battery-status</binary>
+        </binaries>
+    </provides>
+
+    <description>
+      <p>
+        Easily see and monitor your battery health and status.
+      </p>
+    </description>
+
+    <icon type="remote" height="256" width="256">https://raw.githubusercontent.com/mariinkys/iced-battery-status/main/resources/icons/hicolor/scalable/apps/dev.mariinkys.BatteryStatus.svg</icon>
+    <launchable type="desktop-id">dev.mariinkys.BatteryStatus.desktop</launchable>
+    <content_rating type="oars-1.1"/>
+
+    <screenshots>
+        <screenshot type="default" xml:lang="en">
+            <image>https://raw.githubusercontent.com/mariinkys/iced-battery-status/main/screenshots/light-theme-screenshot.png</image>
+            <caption>Light Mode</caption>
+        </screenshot>
+        <screenshot xml:lang="en">
+            <image>https://raw.githubusercontent.com/mariinkys/iced-battery-status/main/screenshots/dark-theme-screenshot.png</image>
+            <caption>Dark Mode</caption>
+        </screenshot>
+    </screenshots>
+
+    <branding>
+      <color type="primary" scheme_preference="light">#FF0000</color>
+      <color type="primary" scheme_preference="dark">#B30000</color>
+    </branding>
+
+    <categories>
+        <category>System</category>
+        <category>Utility</category>
+    </categories>
+
+    <keywords>
+        <keyword>Battery</keyword>
+        <keyword>Status</keyword>
+        <keyword>Health</keyword>
+        <keyword>Monitor</keyword>
+        <keyword>Tool</keyword>
+    </keywords>
+
+    <releases>
+        <release version="2.0.0" date="2025-02-25">
+            <description>
+                <p>First Stable Release</p>
+                <p>See your battery health and status, easily!</p>
+            </description>
+        </release>
+    </releases>
+</component>
