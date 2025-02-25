@@ -26,7 +26,7 @@
 
 ## Installation
 
-You can either use the [provided binaries](https://github.com/mariinkys/iced-battery-status/releases) or use [just](https://github.com/casey/just):
+You can either use the [provided binaries](https://github.com/mariinkys/iced-battery-status/releases)(Not recommended) or use [just](https://github.com/casey/just)(recommended):
 
 ```
 git clone https://github.com/mariinkys/iced-battery-status
