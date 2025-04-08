@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-only
+#![windows_subsystem = "windows"] // disable windows command prompt
 
 mod i18n;
 mod window;
